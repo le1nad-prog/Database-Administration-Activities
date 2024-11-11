@@ -33,7 +33,6 @@ $result = executeQuery($query);
 
     body {
       background-color: #18191A;
-      overflow-x: hidden;
     }
 
     .searchBar {
