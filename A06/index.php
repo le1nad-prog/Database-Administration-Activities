@@ -1,7 +1,23 @@
 <?php
 include("connect.php");
 
-$query = "SELECT * FROM posts LEFT JOIN userInfo ON posts.userID = userInfo.userID";
+if(isset($_POST['btnPost'])){
+  $woym = $_POST['woym'];
+
+  $postQuery = "INSERT INTO posts (userID, profile, dateTime, content) VALUES ('13', 'daniel.jpg', NOW(), '$woym')";
+  executeQuery($postQuery); 
+
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit();
+}
+
+if(isset($_POST['btnDelete'])){
+  $deletePost = $_POST['delete'];
+  $deleteQuery = "DELETE FROM posts WHERE postID = '$deletePost'";
+  executeQuery($deleteQuery);
+}
+
+$query = "SELECT * FROM posts LEFT JOIN userInfo ON posts.userID = userInfo.userID ORDER BY posts.dateTime";
 $result = executeQuery($query);
 
 ?>
@@ -148,11 +164,18 @@ $result = executeQuery($query);
       color: white;
     }
 
+    .wymCard {
+      border-radius: 10px;
+      background-color: #242526;
+      color: white;
+    }
+
     .btn {
       color: white;
       background-color: #242526;
       outline: none;
       border-radius: 5px;
+      border: none;
     }
 
     .btn:hover {
@@ -265,8 +288,34 @@ $result = executeQuery($query);
         </button>
       </div>
 
-      <div class="col-12 col-xl-6 col-lg-8 col-md-12 pt-3 d-flex justify-content-center mt-5">
+      <div class="col-12 col-xl-6 col-lg-8 col-md-12 pt-3 d-flex justify-content-center">
         <div>
+          <div class="wymCard p-3 mt-5 mb-4" style="width: 100%; max-width: 500px; height: 140px;">
+            <div class="d-flex align-items-center mb-3">
+              <img src="images/profile.jpg" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; margin-right: 15px;">
+              <form method="POST" class="w-100">
+                <div class="d-flex align-items-center">
+                  <input name="woym" type="text" class="form-control" placeholder="What's on your mind?" style="border: none; background-color: #3a3b3c; border-radius: 20px; height: 40px; color: white;">
+                  <button class="btn btn-primary" type="submit" name="btnPost" style="border-radius: 5px;">Post</button>
+                </div>
+              </form>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-center">
+              <button class="btn d-flex align-items-center" style="border-radius: 10px; max-width: 100%; width: 175px; height: 40px; max-height: 100%; color: #B0B3B8;">
+                <img src="images/live.png" alt="Live video" width="25" height="25" class="me-1">
+                Live video
+              </button>
+              <button class="btn d-flex align-items-center" style="border-radius: 10px; max-width: 100%; width: 175px; height: 40px; max-height: 100%; color: #B0B3B8;">
+                <img src="images/photos.png" alt="Photo/Video" width="25" height="25" class="me-1">
+                Photo/Video
+              </button>
+              <button class="btn d-flex align-items-center" style="border-radius: 10px; max-width: 100%; width: 175px; height: 40px; max-height: 100%; color: #B0B3B8;">
+                <img src="images/feeling.png" alt="Feeling/Activity" width="25" height="25" class="me-1">
+                Feeling/Activity
+              </button>
+            </div>
+          </div>
           <?php
             if (mysqli_num_rows($result)) {
               while ($posts = mysqli_fetch_assoc($result)) {
@@ -285,31 +334,38 @@ $result = executeQuery($query);
                               <?php echo isset($posts['dateTime']) ? date("M j", strtotime($posts['dateTime'])) : "Date not available"; ?>
                             </small>
                           </div>
+                          <form method="post">
+                            <input type="hidden" value="<?php echo $posts['postID']?>" name="delete">
+                            <button class="btn btn-danger" name="btnDelete">Delete Post</button>
+                          </form>
                         </div>
 
                         <div class="content my-0">
                           <p class="content-text">
                             <?php echo $posts["content"]; ?>
                           </p>
+
+                        <?php if (!empty($posts['attachment'])): ?>
                           <div class="content-image">
                             <img src="images/<?php echo $posts['attachment']; ?>" alt="Content Image"
                               style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;" />
                           </div>
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-evenly border-top p-2">
-                        <button class="btn d-flex justify-content-center align-items-center" style="width: 150px; color:#9A9DA1">
-                          <img src="images/like.png" alt="Like" width="20" height="20" class="me-2"> Like
-                        </button>
-                        <button class="btn d-flex justify-content-center align-items-center" style="width: 150px; color:#9A9DA1">
-                          <img src="images/comment.png" alt="Comment" width="20" height="20" class="me-2"> Comment
-                        </button>
-                        <button class="btn d-flex justify-content-center align-items-center" style="width: 150px; color:#9A9DA1">
-                          <img src="images/share.png" alt="Share" width="20" height="20" class="me-2"> Share
-                        </button>
+                        <?php endif; ?>
                       </div>
                     </div>
-                  <?php
+                    <div class="d-flex justify-content-evenly border-top p-2">
+                      <button class="btn d-flex justify-content-center align-items-center" style="width: 150px; color:#9A9DA1">
+                        <img src="images/like.png" alt="Like" width="20" height="20" class="me-2"> Like
+                      </button>
+                      <button class="btn d-flex justify-content-center align-items-center" style="width: 150px; color:#9A9DA1">
+                        <img src="images/comment.png" alt="Comment" width="20" height="20" class="me-2"> Comment
+                      </button>
+                      <button class="btn d-flex justify-content-center align-items-center" style="width: 150px; color:#9A9DA1">
+                        <img src="images/share.png" alt="Share" width="20" height="20" class="me-2"> Share
+                      </button>
+                    </div>
+                  </div>
+                <?php
                 }
               }
             }
@@ -321,17 +377,17 @@ $result = executeQuery($query);
         <h6>Contacts</h6>
         <?php
 
-        $query = "SELECT firstName, lastName, profile FROM userInfo LEFT JOIN posts ON userInfo.userID = posts.userID"; 
+        $query = "SELECT DISTINCT firstName, lastName, profile FROM userInfo LEFT JOIN posts ON userInfo.userID = posts.userID"; 
         $result = mysqli_query($conn, $query); 
         
         while ($userInfo = mysqli_fetch_assoc($result)) { 
-            ?>
-        <button type="button" class="btn btn-secondary text-start d-flex align-items-center">
-          <img src="images/<?php echo $userInfo['profile'] ?>" alt="User Profile" width="30" height="30"
-            class="rounded-circle me-2">
-          <?php echo $userInfo["firstName"] . " " . $userInfo["lastName"]; ?>
-        </button>
-        <?php
+          ?>
+          <button type="button" class="btn btn-secondary text-start d-flex align-items-center">
+            <img src="images/<?php echo $userInfo['profile'] ?>" alt="User Profile" width="30" height="30"
+              class="rounded-circle me-2">
+            <?php echo $userInfo["firstName"] . " " . $userInfo["lastName"]; ?>
+          </button>
+          <?php
         } 
         ?>
       </div>

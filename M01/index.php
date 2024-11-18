@@ -47,6 +47,8 @@ $result = executeQuery($query);
 
     .navbar {
       background-color: #242526;
+      position: fixed;
+      width: 100%;
     }
 
     .navButtonsCenter {
@@ -233,7 +235,7 @@ $result = executeQuery($query);
 
   <div class="container-fluid">
     <div class="row">
-      <div class="col-3 col-md-0 leftSideBar d-none d-xl-block">
+      <div class="col-3 col-md-0 leftSideBar d-none d-xl-block mt-5">
         <button type="button" class="btn btn-secondary text-start d-flex align-items-center">
           <img src="images/profile.jpg" alt="Profile Icon" width="30" height="30" class="rounded-pill me-2">
           Daniel Melitante
@@ -282,7 +284,7 @@ $result = executeQuery($query);
 
       <div class="col-12 col-xl-6 col-lg-8 col-md-12 pt-3 d-flex justify-content-center">
         <div>
-          <div class="wymCard p-3 mb-4" style="width: 100%; max-width: 500px; height: 140px;">
+          <div class="wymCard p-3 mt-5 mb-4" style="width: 100%; max-width: 500px; height: 140px;">
             <div class="d-flex align-items-center mb-3">
               <img src="images/profile.jpg" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; margin-right: 15px;">
               <form method="POST" class="w-100">
@@ -361,7 +363,7 @@ $result = executeQuery($query);
         </div>
       </div>
 
-      <div class="col-3 col-xl-3 col-lg-4 col-md-0 rightSideBar d-none d-lg-block flex-grow-1">
+      <div class="col-3 col-xl-3 col-lg-4 col-md-0 rightSideBar d-none d-lg-block flex-grow-1 mt-5">
         <h6>Contacts</h6>
         <?php
 
