@@ -332,7 +332,7 @@ $result = executeQuery($query);
                     <div class="header d-flex align-items-center mb-3">
                       <img src="images/<?php echo $posts['profile'] ?>" alt="User Profile" width="40" height="40"
                         class="rounded-circle me-2">
-                      <div class="flex-grow-1">
+                      <div class="flex-grow-1"> 
                         <h6 class="user name mb-0">
                           <?php echo $posts["firstName"] . " " . $posts["lastName"]; ?>
                         </h6>
